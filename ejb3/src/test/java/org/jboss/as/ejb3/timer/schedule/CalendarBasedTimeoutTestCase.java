@@ -879,6 +879,46 @@ public class CalendarBasedTimeoutTestCase {
         }
     }
 
+    @Test
+    public void testWFLY10584() {
+
+        Calendar start = new GregorianCalendar(TimeZone.getTimeZone("Europe/Helsinki"));
+        start.clear();
+        start.set(2018, Calendar.MARCH, 27, 22, 55, 0);
+
+        ScheduleExpression schedule = new ScheduleExpression();
+        schedule.hour("*").timezone("Europe/Helsinki") // don't fail the check below if running in a not default TZ
+                .start(start.getTime());
+        CalendarBasedTimeout calendarTimeout = new CalendarBasedTimeout(schedule);
+        Calendar firstTimeout = calendarTimeout.getFirstTimeout();
+
+        // assert first timeout result, expected: 2018-03-27T23:00+03:00[Europe/Helsinki]
+        Assert.assertNotNull(firstTimeout);
+        if (firstTimeout.get(Calendar.YEAR) != 2018 || //
+                firstTimeout.get(Calendar.MONTH) != Calendar.MARCH || //
+                firstTimeout.get(Calendar.DAY_OF_MONTH) != 27 || //
+                firstTimeout.get(Calendar.HOUR_OF_DAY) != 23 || //
+                firstTimeout.get(Calendar.MINUTE) != 0 || //
+                firstTimeout.get(Calendar.SECOND) != 0 || //
+                firstTimeout.get(Calendar.DST_OFFSET) != 3600000) {
+            Assert.fail("Start time unexpected : " + firstTimeout.toString());
+        }
+
+        Calendar next = calendarTimeout.getNextTimeout(firstTimeout);
+
+        // assert next expected: 2018-03-28T00:00+03:00[Europe/Helsinki]
+        Assert.assertNotNull(next);
+        if (next.get(Calendar.YEAR) != 2018 || //
+                next.get(Calendar.MONTH) != Calendar.MARCH || //
+                next.get(Calendar.DAY_OF_MONTH) != 28 || //
+                next.get(Calendar.HOUR_OF_DAY) != 0 || //
+                next.get(Calendar.MINUTE) != 0 || //
+                next.get(Calendar.SECOND) != 0 || //
+                next.get(Calendar.DST_OFFSET) != 3600000) {
+            Assert.fail("Start time unexpected : " + next.toString());
+        }
+    }
+
     private ScheduleExpression getTimezoneSpecificScheduleExpression() {
         ScheduleExpression scheduleExpression = new ScheduleExpression().timezone(this.timezone.getID());
         GregorianCalendar start = new GregorianCalendar(this.timezone);

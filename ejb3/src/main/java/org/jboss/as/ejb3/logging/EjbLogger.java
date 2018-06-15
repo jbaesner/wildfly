@@ -3170,4 +3170,22 @@ public interface EjbLogger extends BasicLogger {
     @LogMessage(level = WARN)
     @Message(id = 506, value = "[EJB3.2 spec, section 5.6.2] Message Driven Bean can not have a 'finalize' method. (MDB: %s)")
     void mdbCantHaveFinalizeMethod(String className);
+
+    /**
+     * Creates an exception indicating a wrong Calendar type
+     *
+     * @param calendarType
+     * @return an {@link IllegalArgumentException} for the error.
+     */
+    @Message(id = 507, value = "Invalid Calendar type. Expected java.util.GregorianCalendar, but was %s")
+    IllegalArgumentException invalidCalendarType(String calendarType);
+
+    /**
+     * Creates an exception indicating a wrong Temporal type
+     *
+     * @param temporalType
+     * @return an {@link IllegalArgumentException} for the error.
+     */
+    @Message(id = 508, value = "Invalid Temporal type. Expected java.time.ZonedDateTime, but was %s")
+    IllegalArgumentException invalidTemporalType(String temporalType);
 }

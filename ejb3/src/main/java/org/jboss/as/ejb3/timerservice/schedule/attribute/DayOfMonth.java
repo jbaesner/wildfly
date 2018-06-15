@@ -28,7 +28,9 @@ import org.jboss.as.ejb3.timerservice.schedule.value.ScheduleExpressionType;
 import org.jboss.as.ejb3.timerservice.schedule.value.ScheduleValue;
 import org.jboss.as.ejb3.timerservice.schedule.value.SingleValue;
 
+import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -72,6 +74,7 @@ import java.util.regex.Pattern;
  * </p>
  *
  * @author Jaikiran Pai
+ * @author Joerg Baesner
  * @version $Revision: $
  */
 public class DayOfMonth extends IntegerBasedExpression {
@@ -159,6 +162,10 @@ public class DayOfMonth extends IntegerBasedExpression {
     @Override
     protected Integer getMinValue() {
         return MIN_DAY_OF_MONTH;
+    }
+
+    public Integer getNextMatch(ZonedDateTime currentZdt) {
+        return getNextMatch(GregorianCalendar.from(currentZdt));
     }
 
     public Integer getNextMatch(Calendar currentCal) {
@@ -370,6 +377,10 @@ public class DayOfMonth extends IntegerBasedExpression {
             default:
                 return false;
         }
+    }
+
+    public Integer getFirstMatch(ZonedDateTime zdt) {
+        return getFirstMatch(GregorianCalendar.from(zdt));
     }
 
     public Integer getFirstMatch(Calendar cal) {

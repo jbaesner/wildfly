@@ -35,6 +35,7 @@ import java.util.TreeSet;
  * Month
  *
  * @author Jaikiran Pai
+ * @author Joerg Baesner
  * @version $Revision: $
  */
 public class Month extends IntegerBasedExpression {
@@ -118,6 +119,25 @@ public class Month extends IntegerBasedExpression {
             }
         }
         return null;
+    }
+
+    public Integer getNextMatch(int currentMonth) {
+        if (this.scheduleExpressionType == ScheduleExpressionType.WILDCARD) {
+            return currentMonth;
+        }
+        if (this.absoluteValues.isEmpty()) {
+            return null;
+        }
+
+        for (Integer month : this.absoluteValues) {
+            if (currentMonth == month) {
+                return currentMonth;
+            }
+            if (month > currentMonth) {
+                return month;
+            }
+        }
+        return this.absoluteValues.first();
     }
 
     public Integer getNextMatch(Calendar currentCal) {

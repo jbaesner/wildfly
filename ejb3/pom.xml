@@ -246,6 +246,14 @@ projects that depend on this project.-->
             <groupId>org.jboss.spec.javax.rmi</groupId>
             <artifactId>jboss-rmi-api_1.0_spec</artifactId>
             <scope>test</scope>
-      </dependency>
+        </dependency>
+
+        <dependency>
+            <groupId>org.exparity</groupId>
+            <artifactId>hamcrest-date</artifactId>
+            <version>${version.org.exparity.hamcrest-date}</version>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
 </project>

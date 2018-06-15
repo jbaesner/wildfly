@@ -21,9 +21,9 @@
  */
 package org.jboss.as.ejb3.timerservice.schedule.attribute;
 
-import org.jboss.as.ejb3.timerservice.schedule.value.ScheduleExpressionType;
-
 import java.util.Calendar;
+
+import org.jboss.as.ejb3.timerservice.schedule.value.ScheduleExpressionType;
 
 /**
  * Represents in the year value part constructed out of a {@link javax.ejb.ScheduleExpression#getYear()}
@@ -41,6 +41,7 @@ import java.util.Calendar;
  * </p>
  *
  * @author Jaikiran Pai
+ * @author Joerg Baesner
  * @version $Revision: $
  */
 public class Year extends IntegerBasedExpression {
@@ -114,13 +115,17 @@ public class Year extends IntegerBasedExpression {
     }
 
     public Integer getNextMatch(Calendar currentCal) {
+        return getNextMatch(currentCal.get(Calendar.YEAR));
+    }
+
+    public Integer getNextMatch(int currentYear) {
         if (this.scheduleExpressionType == ScheduleExpressionType.WILDCARD) {
-            return currentCal.get(Calendar.YEAR);
+            return currentYear;
         }
         if (this.absoluteValues.isEmpty()) {
             return null;
         }
-        int currentYear = currentCal.get(Calendar.YEAR);
+
         for (Integer year : this.absoluteValues) {
             if (currentYear == year) {
                 return currentYear;

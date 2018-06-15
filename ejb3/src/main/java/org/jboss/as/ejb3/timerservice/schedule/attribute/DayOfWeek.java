@@ -23,7 +23,9 @@ package org.jboss.as.ejb3.timerservice.schedule.attribute;
 
 import org.jboss.as.ejb3.timerservice.schedule.value.ScheduleExpressionType;
 
+import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -35,6 +37,7 @@ import java.util.TreeSet;
  * DayOfWeek
  *
  * @author Jaikiran Pai
+ * @author Joerg Baesner
  * @version $Revision: $
  */
 public class DayOfWeek extends IntegerBasedExpression {
@@ -132,6 +135,18 @@ public class DayOfWeek extends IntegerBasedExpression {
             }
         }
         return null;
+    }
+
+    public java.time.DayOfWeek getNextMatch(ZonedDateTime currentZdt) {
+        Integer nextMatchAsOfCalendar = getNextMatch(GregorianCalendar.from(currentZdt));
+
+        if (nextMatchAsOfCalendar == null) {
+            return null;
+        }
+
+        int nextMatch = nextMatchAsOfCalendar.intValue();
+
+        return java.time.DayOfWeek.of((nextMatch == 1) ? 7 : (nextMatch - 1));
     }
 
     public Integer getNextMatch(Calendar currentCal) {
